@@ -11,7 +11,8 @@ from linebot import (
     LineBotApi, WebhookHandler
 )
 from linebot.exceptions import (
-    InvalidSignatureError
+    InvalidSignatureError,
+    LineBotApiError
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
@@ -61,8 +62,18 @@ def message_text(event):
     global players
     group_id = event.source.group_id,
     user_id = event.source.user_id,
-#    user_profile = line_bot_api.get_profile(user_id)
-    user_profile = line_bot_api.get_group_member_profile(group_id, user_id)
+
+    try:
+        # user_profile = line_bot_api.get_profile(user_id)
+        user_profile = line_bot_api.get_group_member_profile(group_id, user_id)
+        print(user_profile.display_name)
+        print(user_profile.user_id)
+        print(user_profile.picture_url)
+        print(user_profile.status_message)
+    except LineBotApiError as e:
+        # error handle
+        print(e)
+
     user_name = user_profile.display_name
     msg = event.message.text
 
