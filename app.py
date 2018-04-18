@@ -19,7 +19,7 @@ from linebot.models import (
 )
 
 # state
-num_player = 0
+players = []
 
 app = Flask(__name__)
 
@@ -58,9 +58,13 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    global num_player
+    global players
+    user_id = event.source.user_id,
+    user_profile = line_bot_api.get_profile(user_id)
+    user_name = user_profile.display_name
     msg = event.message.text
-    reply, num_player = create_reply.createReply(msg, num_player)
+
+    reply, num_player = create_reply.createReply(msg, user_name, players)
     if reply == "":
         return
 

@@ -38,24 +38,31 @@ def dictMsg(msg):
     return reply
 
 
-def createReply(txt_msg, num_player):
+def createReply(txt_msg, user_name, players):
     reply = ""
+    num_player = len(players)
     if num_player == 0:
         if txt_msg in RESPONSE_DICT:
-            reply = "1!"
-            num_player = 1
+            reply = "1! " + user_name
+            players.append(user_name)
     elif num_player == 1:
         if txt_msg == "2":
-            reply = "2!"
-            num_player = 2
+            reply = "2! " + user_name
+            players.append(user_name)
     elif num_player == 2:
         if txt_msg == "3":
-            reply = "3!"
-            num_player = 3
+            reply = "3! " + user_name
+            players.append(user_name)
     elif num_player == 3:
         if txt_msg == "4":
-            reply = ["4!", "GO!"]
-            num_player = 0
+            reply = ["4! " + user_name,
+                     "GO!\n" +
+                     "東: " + players[0] + "\n" +
+                     "南: " + players[1] + "\n" +
+                     "西: " + players[2] + "\n" +
+                     "北: " + user_name
+                     ]
+            players = []
     else:
         reply = "I have a bag player num is {}".format(num_player)
 
