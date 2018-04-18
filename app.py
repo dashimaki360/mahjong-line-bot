@@ -61,8 +61,9 @@ def callback():
 def message_text(event):
     global players
     # get user name
-    group_id = event.source.group_id,
-    user_id = event.source.user_id,
+    group_id = event.source.group_id
+    user_id = event.source.user_id
+    print(group_id, user_id)
     try:
         # user_profile = line_bot_api.get_profile(user_id)
         user_profile = line_bot_api.get_group_member_profile(group_id, user_id)
