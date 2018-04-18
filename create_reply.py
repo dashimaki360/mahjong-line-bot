@@ -3,9 +3,13 @@
 from __future__ import unicode_literals
 import random
 
-RESPONSE_DICT = {}
+RESPONSE_DICT = {
+        '麻雀1': 'ひとりでは麻雀はできんぞ',
+        'まーじゃん1': 'ひとりでは麻雀はできんぞ',
+        'マージャン1': 'ひとりでは麻雀はできんぞ'
+        }
 FIX_REPLY_LIST = [
-    "麻雀がしたくなったら\"麻雀1\"と言ってくれ "
+    "麻雀がしたくなったら\"麻雀1\"と言ってくれ"
 ]
 
 
