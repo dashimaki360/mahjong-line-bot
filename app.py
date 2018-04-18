@@ -37,10 +37,12 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+'''
 # heroku postgresql setting
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', None)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
+'''
 
 
 class usermessage(db.Model):
