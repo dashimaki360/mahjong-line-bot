@@ -55,12 +55,14 @@ def createReply(txt_msg, user_name, players):
             players.append(user_name)
     elif num_player == 3:
         if txt_msg == "4":
+            players.append(user_name)
+            rnd_players = random.sample(players, len(players))
             reply = ["4! " + user_name,
                      "GO!\n" +
-                     "東: " + players[0] + "\n" +
-                     "南: " + players[1] + "\n" +
-                     "西: " + players[2] + "\n" +
-                     "北: " + user_name
+                     "東: " + rnd_players[0] + "\n" +
+                     "南: " + rnd_players[1] + "\n" +
+                     "西: " + rnd_players[2] + "\n" +
+                     "北: " + rnd_players[3]
                      ]
             players = []
     else:
