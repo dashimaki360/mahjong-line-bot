@@ -18,8 +18,11 @@ from linebot.models import (
     StickerMessage, StickerSendMessage,
 )
 
+# state
+num_player = 0
 
 app = Flask(__name__)
+
 
 # LINE BOT setting
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
@@ -32,7 +35,6 @@ if channel_access_token is None:
     sys.exit(1)
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
-
 
 
 @app.route("/callback", methods=['POST'])
@@ -56,23 +58,22 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
+    global num_player
     msg = event.message.text
-    reply = create_reply.createReply(msg)
+    reply, num_player = create_reply.createReply(msg, num_player)
+    if reply == "":
+        return
 
     if isinstance(reply, list):
         text_msgs = []
         for rep in reply:
             text_msgs.append(TextSendMessage(text=rep))
-        rec_msg = ','.join(reply)
     else:
         text_msgs = TextSendMessage(text=reply)
-        rec_msg = reply
-
     line_bot_api.reply_message(
         event.reply_token,
         text_msgs
     )
-#    addToSql(event, rec_msg)
 
 
 @handler.add(MessageEvent, message=StickerMessage)
@@ -82,9 +83,6 @@ def message_sticker(event):
         package_id = 3
     else:
         package_id = 4
-    reply = "stamp {} {}".format(package_id, sticker_id)
-
-#    addToSql(event, reply, sticker=True)
 
     line_bot_api.reply_message(
         event.reply_token,
@@ -95,7 +93,9 @@ def message_sticker(event):
     )
 
 
+
+
 if __name__ == "__main__":
-    #db.create_all()
+    # db.create_all()
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
