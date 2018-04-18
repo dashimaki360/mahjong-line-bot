@@ -60,9 +60,9 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     global players
+    # get user name
     group_id = event.source.group_id,
     user_id = event.source.user_id,
-
     try:
         # user_profile = line_bot_api.get_profile(user_id)
         user_profile = line_bot_api.get_group_member_profile(group_id, user_id)
@@ -70,11 +70,12 @@ def message_text(event):
         print(user_profile.user_id)
         print(user_profile.picture_url)
         print(user_profile.status_message)
+        user_name = user_profile.display_name
     except LineBotApiError as e:
         # error handle
         print(e)
+        user_name = "NoName"
 
-    user_name = user_profile.display_name
     msg = event.message.text
 
     reply, num_player = create_reply.createReply(msg, user_name, players)
