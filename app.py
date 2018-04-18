@@ -67,11 +67,8 @@ def message_text(event):
     try:
         # user_profile = line_bot_api.get_profile(user_id)
         user_profile = line_bot_api.get_group_member_profile(group_id, user_id)
-        print(user_profile.display_name)
-        print(user_profile.user_id)
-        print(user_profile.picture_url)
-        print(user_profile.status_message)
         user_name = user_profile.display_name
+        icon_url = user_profile.picture_url
     except LineBotApiError as e:
         # error handle
         print(e)
@@ -79,7 +76,7 @@ def message_text(event):
 
     msg = event.message.text
 
-    reply, num_player = create_reply.createReply(msg, user_name, players)
+    reply, players = create_reply.createReply(msg, user_name, players)
     if reply == "":
         return
 

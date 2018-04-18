@@ -66,6 +66,6 @@ def createReply(txt_msg, user_name, players):
                      ]
             players = []
     else:
-        reply = "I have a bag player num is {}".format(num_player)
+        reply = "I have a bag players {}".format(players)
 
-    return reply, num_player
+    return reply, players
