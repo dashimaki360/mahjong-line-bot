@@ -59,6 +59,9 @@ def callback():
 def message_text(event):
     global players
 
+    # get msg
+    msg = event.message.text
+
     # get user name
     # group msg
     if event.source.type == "group":
@@ -85,13 +88,14 @@ def message_text(event):
             user_name = "NoName"
     else:
         return
-
     print("display name", user_name, "group id", group_id, "user id", user_id)
+
+    # if no mahjong object create
     if group_id not in mahjongs:
         mahjongs[group_id] = MahjongGo()
+
     mahjong = mahjongs[group_id]
-    msg = event.message.text
-    reply, players = mahjong.createReply(msg, user_name)
+    reply = mahjong.createReply(msg, user_name)
     if reply == "":
         return
 
