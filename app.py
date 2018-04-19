@@ -3,8 +3,7 @@ from __future__ import unicode_literals
 
 import os
 import sys
-import random
-import create_reply
+from create_reply import MahjongGo
 from flask import Flask, request, abort
 
 from linebot import (
@@ -16,11 +15,10 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    StickerMessage, StickerSendMessage,
 )
 
-# state
-players = []
+# state memory
+mahjongs = {}
 
 app = Flask(__name__)
 
@@ -66,7 +64,6 @@ def message_text(event):
     if event.source.type == "group":
         group_id = event.source.group_id
         user_id = event.source.user_id
-        print("group id", group_id, "user id", user_id)
         try:
             user_profile = line_bot_api.get_group_member_profile(group_id, user_id)
             user_name = user_profile.display_name
@@ -77,7 +74,8 @@ def message_text(event):
     # user msg
     elif event.source.type == "user":
         user_id = event.source.user_id
-        print("group id", "NO_GROUP", "user id", user_id)
+        # use user_id insted of groupid
+        group_id = user_id
         try:
             user_profile = line_bot_api.get_profile(user_id)
             user_name = user_profile.display_name
@@ -88,8 +86,12 @@ def message_text(event):
     else:
         return
 
+    print("display name", user_name, "group id", group_id, "user id", user_id)
+    if group_id not in mahjongs:
+        mahjongs[group_id] = MahjongGo()
+    mahjong = mahjongs[group_id]
     msg = event.message.text
-    reply, players = create_reply.createReply(msg, user_name, players)
+    reply, players = mahjong.createReply(msg, user_name)
     if reply == "":
         return
 
@@ -103,25 +105,6 @@ def message_text(event):
         event.reply_token,
         text_msgs
     )
-
-
-@handler.add(MessageEvent, message=StickerMessage)
-def message_sticker(event):
-    sticker_id = random.randint(180, 307)
-    if sticker_id < 260:
-        package_id = 3
-    else:
-        package_id = 4
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        StickerSendMessage(
-            package_id=package_id,
-            sticker_id=sticker_id,
-        )
-    )
-
-
 
 
 if __name__ == "__main__":
